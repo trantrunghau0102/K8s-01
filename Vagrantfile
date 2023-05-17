@@ -1,0 +1,45 @@
+# -*- mode: ruby -*-
+# vi: set ft=ruby :
+
+VAGRANTFILE_API_VERSION = "2"
+
+Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
+  config.vm.box = "geerlingguy/centos7"
+  config.ssh.insert_key = false
+
+  config.vm.provider :virtualbox do |v|
+    v.memory = 2048
+    v.cpus = 2
+    v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+    v.customize ["modifyvm", :id, "--ioapic", "on"]
+  config.vm.disk :disk, size: "30GB", primary: true
+  end
+
+
+  # Set the name of the VM.
+  config.vm.define :master1 do |master1|
+    master1.vm.hostname = "master1"
+    master1.vm.network :private_network, ip: "192.168.10.11"
+  end
+  # config.vm.define :worker1 do |worker1|
+  #   worker1.vm.hostname = "worker1"
+  #   worker1.vm.network :private_network, ip: "192.168.10.12"
+  # end
+  # config.vm.define :worker2 do |worker2|
+  #   worker2.vm.hostname = "worker2"
+  #   worker2.vm.network :private_network, ip: "192.168.10.90"
+  # end
+  # config.vm.define :kubespray do |kubespray|
+  #   kubespray.vm.hostname = "kubespray"
+  #   kubespray.vm.network :private_network, ip: "192.168.10.8"
+  # end
+
+  # # Ansible provisioner.
+    config.vm.provision "shell",
+      path: "init-vm.sh"
+  # config.vm.provision "ansible" do |ansible|
+  #   ansible.playbook = "provisioning/playbook.yml"
+  #   ansible.inventory_path = "provisioning/inventory"
+  #   ansible.become = true
+  # end
+end 
