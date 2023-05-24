@@ -1,5 +1,7 @@
 #!/bin/bash
 
+sudo -i
+sudo echo "vagrant   ALL=(ALL)   NOPASSWD: ALL" >> /etc/sudoers
 sudo swapoff -a
 sudo sed '/centos-swap/d' /etc/fstab
 sudo yum install git -y
